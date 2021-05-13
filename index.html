@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,12 +8,28 @@
     <title>Document</title>
     <link rel="stylesheet" href="/style/style.css">
 </head>
-<body>
-    <button id="getJoke">getJoke</button>
 
+<body>
+
+    <!-- <button id="getJoke">getJoke</button> -->
+
+
+    <form id="joke">
+        <label>Random
+            <input type="radio" value="random" name="joke_choice" checked>
+        </label>
+        <label>From Categories
+            <input type="radio" value="categories" name="joke_choice">
+        </label>
+        <label>Search
+            <input type="radio" value="search" name="joke_choice">
+        </label>
+        <button>Get Joke</button>
+    </form>
 
 
 
     <script src="/script.js"></script>
 </body>
+
 </html>
