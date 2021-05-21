@@ -33,7 +33,8 @@ class Form {
     async submit(e) {
         e.preventDefault();
         let type = document.querySelector("input[name=joke_choice]:checked")
-        console.log(type.value)
+
+        // console.log(type.value)
         let url = `https://api.chucknorris.io/jokes/`;
         switch (type.value) {
             case 'random':
