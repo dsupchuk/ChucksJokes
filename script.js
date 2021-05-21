@@ -47,6 +47,7 @@ class Form {
                 url += 'search?query=hello'
                 break;
         }
+        
 
         let joke = await this.request(url)
         console.log(joke)
