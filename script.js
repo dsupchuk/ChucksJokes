@@ -34,7 +34,7 @@ class Form {
         e.preventDefault();
         let type = document.querySelector("input[name=joke_choice]:checked")
 
-        // console.log(type.value)
+        console.log(type.value)
         let url = `https://api.chucknorris.io/jokes/`;
         switch (type.value) {
             case 'random':
@@ -61,7 +61,7 @@ class Form {
     }
     async getCategories(){
         let categories = await this.request(`https://api.chucknorris.io/jokes/categories`)
-        // console.log(categories)
+        console.log(categories)
         categories = categories
             .map((cat,index)=>`<li><lable>${cat}<input type="radio" value="${cat}" name="category" ${index===0 ? 'checked' : ""}></lable></li>`)
             .join("")
