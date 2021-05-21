@@ -34,7 +34,7 @@ class Form {
         e.preventDefault();
         let type = document.querySelector("input[name=joke_choice]:checked")
 
-        console.log(type.value)
+        // console.log(type.value)
         let url = `https://api.chucknorris.io/jokes/`;
         switch (type.value) {
             case 'random':
@@ -45,7 +45,8 @@ class Form {
                 url += `random?category=${category.value}`
                 break;
             case 'search':
-                url += 'search?query=hello'
+                let search = document.querySelector('#search')
+                url += `search?query=${search.value ? search.value : `Hell`}`
                 break;
         }
 
