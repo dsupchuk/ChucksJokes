@@ -27,22 +27,24 @@
 class Form {
     constructor(id) {
         this.el = document.querySelector(`#${id}`)
+        this.getCategories();
         this.el.addEventListener('submit', this.submit.bind(this))
     }
     async submit(e) {
         e.preventDefault();
         let type = document.querySelector("input[name=joke_choice]:checked")
-        console.log(type.value)
-        let url;
+        // console.log(type.value)
+        let url = `https://api.chucknorris.io/jokes/`;
         switch (type.value) {
             case 'random':
-                url = 'https://api.chucknorris.io/jokes/random'
+                url += 'random'
                 break;
             case 'categories':
-                url = 'https://api.chucknorris.io/jokes/categories'
+                let category = document.querySelector('input[name=category]:checked')
+                url += `random?category=${category.value}`
                 break;
             case 'search':
-                url = 'https://api.chucknorris.io/jokes/search?query=hello'
+                url += 'search?query=hello'
                 break;
         }
 
@@ -55,7 +57,17 @@ class Form {
         return data
 
     }
+    async getCategories(){
+        let categories = await this.request(`https://api.chucknorris.io/jokes/categories`)
+        // console.log(categories)
+        categories = categories
+            .map((cat,index)=>`<li><lable>${cat}<input type="radio" value="${cat}" name="category" ${index===0 ? 'checked' : ""}></lable></li>`)
+            .join("")
+
+        let categoriesDATA = document.querySelector('ul#categories')
+        categoriesDATA.innerHTML = categories
+    }
 }
 let jokeForm = new Form('joke')
 
-console.log(jokeForm)
+// console.log(jokeForm)
