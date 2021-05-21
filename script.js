@@ -25,7 +25,8 @@
 //     }
 // }
 class Form {
-    constructor(id) {
+    constructor(id, api) {
+        this.api = api
         this.el = document.querySelector(`#${id}`)
         this.getCategories();
         this.el.addEventListener('submit', this.submit.bind(this))
@@ -35,7 +36,8 @@ class Form {
         let type = document.querySelector("input[name=joke_choice]:checked")
 
         // console.log(type.value)
-        let url = `https://api.chucknorris.io/jokes/`;
+        let url = this.api;
+        let except = true;
         switch (type.value) {
             case 'random':
                 url += 'random'
@@ -46,13 +48,29 @@ class Form {
                 break;
             case 'search':
                 let search = document.querySelector('#search')
-                url += `search?query=${search.value ? search.value : `Hell`}`
+                if (!search.value) {
+                    // except = false;
+                    search.focus();
+                } else {
+                    url += `search?query=${search.value ? search.value : `Hello`}`
+                }
                 break;
         }
 
+        if (except) {
+            let joke = await this.request(url)
+            if (joke.result) {
+                if (joke.result.length > 0) {
+                    joke = joke.result.map(joke => new Joke(joke))
+                }
+            } else {
+                joke = new Joke(joke)
+            }
+            console.log(joke)
+        }
 
-        let joke = await this.request(url)
-        console.log(joke)
+        // joke = joke.result && joke.result.length>0 ? joke.result.map(joke => new Joke(joke)) :  new Joke(joke)
+
     }
     async request(url) {
         let getDATA = await fetch(url),
@@ -60,17 +78,37 @@ class Form {
         return data
 
     }
-    async getCategories(){
-        let categories = await this.request(`https://api.chucknorris.io/jokes/categories`)
+    async getCategories() {
+        let categories = await this.request(`${this.api}categories`)
         console.log(categories)
         categories = categories
-            .map((cat,index)=>`<li><lable>${cat}<input type="radio" value="${cat}" name="category" ${index===0 ? 'checked' : ""}></lable></li>`)
+            .map((cat, index) => `<li><lable>${cat}<input type="radio" value="${cat}" name="category" ${index===0 ? 'checked' : ""}></lable></li>`)
             .join("")
 
         let categoriesDATA = document.querySelector('ul#categories')
         categoriesDATA.innerHTML = categories
     }
 }
-let jokeForm = new Form('joke')
+class Joke {
+    constructor(joke) {
+        this.create(joke)
+        this.render();
+    }
+    create(joke) {
+        for (let key in joke) {
+            this[key] = joke[key]
+        }
+    }
+    render() {
+        let data = [];
+        for (let key in this) {
+            data.push(`<li>${key}: ${this[key]}</li>`)
+        }
+        console.log(data)
+        jokesAll.innerHTML += `<ul>${data.join('')}</ul>`
+    }
+}
+let jokeForm = new Form('joke', `https://api.chucknorris.io/jokes/`)
+jokesAll = document.querySelector('#jokes')
 
 // console.log(jokeForm)
