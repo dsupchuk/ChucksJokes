@@ -104,11 +104,43 @@ class Joke {
         for (let key in this) {
             data.push(`<li>${key}: ${this[key]}</li>`)
         }
-        console.log(data)
-        jokesAll.innerHTML += `<ul>${data.join('')}</ul>`
+        // console.log(data)
+        let FavBtn = document.createElement('button');
+        FavBtn.innerHTML = 'Add To Fav'
+        FavBtn.addEventListener('click', this.addFav.bind(this))
+
+        let FavBtnLi = document.createElement('li')
+        FavBtnLi.append(FavBtn);
+
+        let list = document.createElement('ul')
+        list.innerHTML = data.join('')
+        list.append(FavBtnLi)
+
+        jokesAll.append(list)
+    }
+    addFav(){
+        let storageJokes = localStorage.getItem('favJokes');
+        storageJokes = storageJokes ? JSON.parse(storageJokes) : [];
+
+        storageJokes.push(this);
+        localStorage.setItem('favJokes', JSON.stringify(storageJokes))
     }
 }
+
+class Jokes{
+    static fav(){
+        let storageJokes = localStorage.getItem('favJokes');
+        if(storageJokes){
+            storageJokes = JSON.parse(storageJokes)
+
+            storageJokes.forEach(joke => new Joke(joke))
+        }
+    }
+}
+
+
+
 let jokeForm = new Form('joke', `https://api.chucknorris.io/jokes/`)
 jokesAll = document.querySelector('#jokes')
-
+Jokes.fav()
 // console.log(jokeForm)

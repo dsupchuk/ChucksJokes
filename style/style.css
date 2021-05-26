@@ -14,4 +14,34 @@
 #joke label {
   margin-bottom: 10px;
 }
+
+#jokes {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#jokes #all {
+  width: 49%;
+  padding: 10px;
+  border: 1px solid black;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding-bottom: 10px;
+}
+
+#jokes #fav {
+  width: 49%;
+  padding: 10px;
+  border: 1px solid green;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding-bottom: 10px;
+}
 /*# sourceMappingURL=style.css.map */
