@@ -25,9 +25,10 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  margin-top: 15px;
 }
 
-#jokes #all {
+#jokes #getAll {
   width: 49%;
   padding: 10px;
   border: 1px solid black;

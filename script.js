@@ -1,29 +1,3 @@
-// let getJokeFun = async () => {
-//     let getDATA = await fetch('https://api.chucknorris.io/jokes/random'),
-//         data = await getDATA.json(),
-//         chuck = new Chuck(data);
-//         chuck.render()
-// }
-// let getJoke = document.querySelector('#getJoke')
-// getJoke.addEventListener('click', getJokeFun);
-
-
-
-// class Chuck {
-//     constructor(data) {
-//         this.create(data);
-//     }
-//     create(data){
-//         for(let key in data){
-//             this[key] = data[key];
-//         }
-//     }
-//     render(){
-//         for(let key in this){
-//             console.log(`${key} : ${this[key]}`)
-//         }
-//     }
-// }
 class Form {
     constructor(id, api) {
         this.api = api
@@ -69,8 +43,6 @@ class Form {
             console.log(joke)
         }
 
-        // joke = joke.result && joke.result.length>0 ? joke.result.map(joke => new Joke(joke)) :  new Joke(joke)
-
     }
     async request(url) {
         let getDATA = await fetch(url),
@@ -104,43 +76,55 @@ class Joke {
         for (let key in this) {
             data.push(`<li>${key}: ${this[key]}</li>`)
         }
-        // console.log(data)
         let FavBtn = document.createElement('button');
-        FavBtn.innerHTML = 'Add To Fav'
+
+        FavBtn.innerHTML = this.favourite ? "Remove from favourite" : "Add to favourite";
         FavBtn.addEventListener('click', this.addFav.bind(this))
 
         let FavBtnLi = document.createElement('li')
         FavBtnLi.append(FavBtn);
 
         let list = document.createElement('ul')
+        list.dataset.id = this.id
         list.innerHTML = data.join('')
         list.append(FavBtnLi)
 
-        jokesAll.append(list)
+        this.favourite ? fav.append(list) : getAll.append(list)
     }
-    addFav(){
-        let storageJokes = localStorage.getItem('favJokes');
-        storageJokes = storageJokes ? JSON.parse(storageJokes) : [];
+    addFav() {
 
-        storageJokes.push(this);
+        this.favourite = true;
+
+        let jokeBtn = document.querySelector(`ul[data-id=${this.id}] button`)
+        jokeBtn.innerHTML = "Remove from favourite"
+        
+
+        let storageJokes = localStorage.getItem('favJokes');
+        storageJokes = storageJokes ? JSON.parse(storageJokes) : {};
+
+        storageJokes[this.id] = this
+
         localStorage.setItem('favJokes', JSON.stringify(storageJokes))
+
+        Jokes.fav();
     }
 }
 
-class Jokes{
-    static fav(){
+class Jokes {
+    static fav() {
         let storageJokes = localStorage.getItem('favJokes');
-        if(storageJokes){
+        if (storageJokes) {
             storageJokes = JSON.parse(storageJokes)
 
-            storageJokes.forEach(joke => new Joke(joke))
+            for (let key in storageJokes) {
+                new Joke(storageJokes[key])
+            }
         }
     }
 }
 
+let jokeForm = new Form('joke', `https://api.chucknorris.io/jokes/`),
+    getAll = document.querySelector('#getAll'),
+    fav = document.querySelector('#fav')
 
-
-let jokeForm = new Form('joke', `https://api.chucknorris.io/jokes/`)
-jokesAll = document.querySelector('#jokes')
 Jokes.fav()
-// console.log(jokeForm)
