@@ -23,7 +23,6 @@ class Form {
             case 'search':
                 let search = document.querySelector('#search')
                 if (!search.value) {
-                    // except = false;
                     search.focus();
                 } else {
                     url += `search?query=${search.value ? search.value : `Hello`}`
@@ -73,41 +72,55 @@ class Joke {
     }
     render() {
         let data = [];
-        for (let key in this) {
-            data.push(`<li>${key}: ${this[key]}</li>`)
-        }
-        let FavBtn = document.createElement('button');
+        // for (let key in this) {
+        //     console.log(this.value)
+        //     data.push(`<li>${key}: ${this[key]}</li>`)
+        // }
+        if (this.value !== undefined) {
+            data.push(`<li>ID: ${this.id}</li> <li>Joke: ${this.value}</li>`)
+            let FavBtn = document.createElement('button');
 
-        FavBtn.innerHTML = this.favourite ? "Remove from favourite" : "Add to favourite";
-        FavBtn.addEventListener('click', this.addFav.bind(this))
+            FavBtn.innerHTML = this.favourite ? "Remove from favourite" : "Add to favourite";
+            FavBtn.dataset.favourite = this.favourite ? true : false;
 
-        let FavBtnLi = document.createElement('li')
-        FavBtnLi.append(FavBtn);
+            FavBtn.addEventListener('click', this.addFav.bind(this))
 
-        let list = document.createElement('ul')
-        list.dataset.id = this.id
-        list.innerHTML = data.join('')
-        list.append(FavBtnLi)
+            let FavBtnLi = document.createElement('li')
+            FavBtnLi.append(FavBtn);
 
-        this.favourite ? fav.append(list) : getAll.append(list)
+            let list = document.createElement('ul')
+            list.dataset.id = this.id
+            list.innerHTML = this.value ? data.join('') : console.log(`sorry`)
+            list.append(FavBtnLi)
+
+            this.favourite ? fav.append(list) : getAll.append(list)
+        } else 
+            alert(`I can't get Joke with this value: "${search.value}"`)
     }
     addFav() {
-
-        this.favourite = true;
-
         let jokeBtn = document.querySelector(`ul[data-id=${this.id}] button`)
         jokeBtn.innerHTML = "Remove from favourite"
-        
+
 
         let storageJokes = localStorage.getItem('favJokes');
         storageJokes = storageJokes ? JSON.parse(storageJokes) : {};
-
-        storageJokes[this.id] = this
-
+        if (jokeBtn && jokeBtn.dataset.favourite === "false") {
+            this.favourite = true;
+            jokeBtn.innerHTML = 'Remove from favourite';
+            jokeBtn.dataset.favourite = true;
+            storageJokes[this.id] = this;
+        } else {
+            if (jokeBtn) {
+                jokeBtn.innerHTML = 'Add to from favourite';
+                jokeBtn.dataset.favourite = false;
+            }
+            this.favourite = false;
+            delete storageJokes[this.id];
+        }
         localStorage.setItem('favJokes', JSON.stringify(storageJokes))
-
         Jokes.fav();
     }
+
 }
 
 class Jokes {
@@ -115,7 +128,6 @@ class Jokes {
         let storageJokes = localStorage.getItem('favJokes');
         if (storageJokes) {
             storageJokes = JSON.parse(storageJokes)
-
             for (let key in storageJokes) {
                 new Joke(storageJokes[key])
             }

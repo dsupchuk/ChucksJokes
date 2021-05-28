@@ -1,3 +1,5 @@
+body
+    margin: 20px
 #joke
     display: flex
     flex-direction: column
@@ -12,16 +14,39 @@
     align-items: flex-start
     justify-content: space-between
     margin-top: 15px
+    ul
+        list-style-type: none
+        li
+            padding: 5px
+            font-size: 18px
+            font-weight: bold
+            &:nth-child(1)
+                color: lightblue
+                font-size: 10px
+        
+            
     #getAll
-        width: 49%
+        width: 45%
         padding: 10px
-        border: 1px solid black
+        overflow: hidden;
         box-sizing: border-box
         padding-bottom: 10px
+        ul
+            background-color: #F8F8F8
+            border-radius: 10px
     #fav
-        width: 49%
-        padding: 10px
-        border: 1px solid green
+        width: 45%
+        padding: 15px
         box-sizing: border-box
+        overflow: hidden;
+        background-color: #F8F8F8
         padding-bottom: 10px
+        position: relative
+        top: -500px
+        ul
+            background-color: white
+            border-radius: 10px
+            padding: 8px
+            
+
     
